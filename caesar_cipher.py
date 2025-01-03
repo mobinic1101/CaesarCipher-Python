@@ -17,13 +17,33 @@ class CaesarCipher:
         self.__all_chars = self.digits + self.ascii_lowercase + self.ascii_uppercase
         self.__all_chars_reverse = [*reversed(self.__all_chars)]
 
-    def __shift_char(self, char: str, shift: int):
-        iterable = self.__all_chars if shift > 0 else self.__all_chars_reverse
-        current_char = ""
-        c = cycle(iterable, iterable.index(char))
+    # def __shift_char(self, char: str, shift: int):
+    #     iterable = self.__all_chars if shift > 0 else self.__all_chars_reverse
+    #     current_char = ""
+    #     c = cycle(iterable, iterable.index(char))
 
-        for _ in range(abs(shift) + 1):
-            current_char = next(c)
+    #     for _ in range(abs(shift) + 1):
+    #         current_char = next(c)
+
+    #     return current_char
+
+    def __shift_char(self, char: str, shift: int = 1):
+        if shift == 0:
+            return char
+        
+        all_chars_len = len(self.__all_chars)
+        char_index = self.__all_chars.index(char)
+        current_char = ''
+        shift_index = char_index + shift
+        if shift_index > 0:
+            if shift_index < all_chars_len:
+                current_char = self.__all_chars[shift_index]
+            else:
+                shift_index = abs(shift_index - all_chars_len - shift)
+                current_char = self.__all_chars[shift_index]
+        else:
+            shift_index = abs(shift_index - all_chars_len - shift)
+            current_char = self.__all_chars[shift_index]
 
         return current_char
 
@@ -41,12 +61,15 @@ class CaesarCipher:
 
 
 # testing it!
-if __name__ == '__main__':
+if __name__ == "__main__":
     e = CaesarCipher()
-    password = "Hello World 1357$**"
-    passwordE = e.encrypt(password, shift=10)
-    passwordD = e.decrypt(passwordE, shift=-10)
-    print(f"encrypted of '{password}': ", passwordE)
-    print(f"decrypted of '{passwordE}': ", passwordD)
-    # encrypted of 'Hello World 1357':  Rovvy 6yBvn bdfh
-    # decrypted of 'Rovvy 6yBvn bdfh':  Hello World 1357
+    while 1:
+        input()
+
+        password = "Hello World 1357$**"
+        passwordE = e.encrypt(password, shift=100000)
+        passwordD = e.decrypt(passwordE, shift=-100000)
+        print(f"encrypted of '{password}': ", passwordE)
+        print(f"decrypted of '{passwordE}': ", passwordD)
+        # encrypted of 'Hello World 1357':  Rovvy 6yBvn bdfh
+        # decrypted of 'Rovvy 6yBvn bdfh':  Hello World 1357
