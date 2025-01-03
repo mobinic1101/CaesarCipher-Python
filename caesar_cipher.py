@@ -1,4 +1,4 @@
-from string import ascii_lowercase, digits
+from string import ascii_lowercase, ascii_uppercase, digits
 from typing import List
 
 
@@ -11,16 +11,13 @@ def cycle(iterable: List, start: int = 0):
 
 class CaesarCipher:
     def __init__(self):
-        self.ascii_chars = [*ascii_lowercase]
+        self.ascii_lowercase = [*ascii_lowercase]
+        self.ascii_uppercase = [*ascii_uppercase]
         self.digits = [*digits]
-        self.__all_chars = self.digits + self.ascii_chars
-        self.__all_chars_reverse = self.digits[::-1] + self.ascii_chars[::-1]
+        self.__all_chars = self.digits + self.ascii_lowercase + self.ascii_uppercase
+        self.__all_chars_reverse = [*reversed(self.__all_chars)]
 
     def __shift_char(self, char: str, shift: int):
-        char = char.lower()
-        if shift > len(self.ascii_chars) or shift < -len(self.ascii_chars):
-            raise ValueError("Invalid shift")
-
         iterable = self.__all_chars if shift > 0 else self.__all_chars_reverse
         current_char = ""
         c = cycle(iterable, iterable.index(char))
@@ -46,8 +43,10 @@ class CaesarCipher:
 # testing it!
 if __name__ == '__main__':
     e = CaesarCipher()
-    password = "hello world 123"
+    password = "Hello World 1357$**"
     passwordE = e.encrypt(password, shift=10)
     passwordD = e.decrypt(passwordE, shift=-10)
     print(f"encrypted of '{password}': ", passwordE)
     print(f"decrypted of '{passwordE}': ", passwordD)
+    # encrypted of 'Hello World 1357':  Rovvy 6yBvn bdfh
+    # decrypted of 'Rovvy 6yBvn bdfh':  Hello World 1357
