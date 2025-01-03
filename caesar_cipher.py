@@ -13,14 +13,15 @@ class CaesarCipher:
     def __init__(self):
         self.ascii_chars = [*ascii_lowercase]
         self.digits = [*digits]
-        self.all_chars = self.digits + self.ascii_chars
+        self.__all_chars = self.digits + self.ascii_chars
+        self.__all_chars_reverse = self.digits[::-1] + self.ascii_chars[::-1]
 
     def __shift_char(self, char: str, shift: int):
         char = char.lower()
         if shift > len(self.ascii_chars) or shift < -len(self.ascii_chars):
             raise ValueError("Invalid shift")
 
-        iterable = self.ascii_chars + self.digits if shift > 0 else self.ascii_chars[::-1] + self.digits[::-1]
+        iterable = self.__all_chars if shift > 0 else self.__all_chars_reverse
         current_char = ""
         c = cycle(iterable, iterable.index(char))
 
@@ -32,7 +33,7 @@ class CaesarCipher:
     def encrypt(self, text, shift=1):
         new_text = ""
         for char in text:
-            if char not in self.all_chars:
+            if char not in self.__all_chars:
                 new_text += char
                 continue
             new_text += self.__shift_char(char, shift)
